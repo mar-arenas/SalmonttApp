@@ -16,19 +16,6 @@ public class Empleado extends Persona {
      * Constructor vacío
      */
     public Empleado() {
-        super();
-    }
-
-    /**
-     * Constructor con parámetros de Persona
-     * @param rut RUT del empleado
-     * @param nombre Nombre del empleado
-     * @param apellido Apellido del empleado
-     * @param email Correo electrónico
-     * @param telefono Número de teléfono
-     */
-    public Empleado(String rut, String nombre, String apellido, String email, String telefono) {
-        super(rut, nombre, apellido, email, telefono);
     }
 
     /**
@@ -47,7 +34,6 @@ public class Empleado extends Persona {
     public Empleado(String rut, String nombre, String apellido, String email, String telefono, 
                     Direccion direccion, String cargo, String departamento, double salario, 
                     String fechaContratacion) {
-        super(rut, nombre, apellido, email, telefono, direccion);
         this.cargo = cargo;
         this.departamento = departamento;
         this.salario = salario;

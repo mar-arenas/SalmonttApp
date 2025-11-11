@@ -21,22 +21,6 @@ public class Persona {
     }
 
     /**
-     * Constructor con parámetros básicos
-     * @param rut RUT de la persona
-     * @param nombre Nombre de la persona
-     * @param apellido Apellido de la persona
-     * @param email Correo electrónico
-     * @param telefono Número de teléfono
-     */
-    public Persona(String rut, String nombre, String apellido, String email, String telefono) {
-        this.rut = rut;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
-        this.telefono = telefono;
-    }
-
-    /**
      * Constructor con todos los parámetros incluyendo dirección
      * @param rut RUT de la persona
      * @param nombre Nombre de la persona
@@ -114,7 +98,7 @@ public class Persona {
                 ", Nombre='" + nombre + " " + apellido + '\'' +
                 ", Email='" + email + '\'' +
                 ", Teléfono='" + telefono + '\'' +
-                ", Dirección=" + (direccion != null ? direccion.toString() : "Sin dirección") +
+                ", Dirección=" + direccion.toString() +
                 '}';
     }
 }
