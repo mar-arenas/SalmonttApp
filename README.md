@@ -11,7 +11,7 @@ El sistema aplica principios de Programación Orientada a Objetos (POO) y demues
 ## Estructura del Proyecto
 
 ```
-POO-exp1-Salmontt/
+SalmonttApp/
 ├── src/
 │   ├── model/              # Clases de dominio
 │   │   ├── Persona.java    # Clase base con datos personales
@@ -181,7 +181,7 @@ Exportado correctamente a: empleados_export.csv
 
 ---
 
-## Autor: Mariana Arenas Vergara
+### Autor: Mariana Arenas Vergara
 
 **Proyecto desarrollado para:**
 - Asignatura: Desarrollo Orientado a Objetos I
