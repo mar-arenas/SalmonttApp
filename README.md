@@ -89,17 +89,6 @@ Contiene la interfaz de usuario:
 
 ---
 
-## Cambios implementados (resumen)
-
-- Exportar a CSV: Se añadió la capacidad en GestorEmpleados para exportar la lista de empleados a un archivo CSV (método exportarCSV).
-- Validaciones mejoradas: Validador actualizado para validación más estricta de RUT y email, y mejor manejo de teléfono.
-- Fechas con java.time: El manejo de fechas (fechaContratacion) usa ahora java.time.LocalDate. Se aceptan formatos dd/MM/yyyy y yyyy-MM-dd al cargar desde archivo.
-- Lectura flexible: La carga desde `empleados.txt` ahora acepta separadores `;` o `,` y campos opcionales (ej: id, fechaNacimiento). Las líneas con campos inválidos se registran y se ignoran sin detener la carga.
-- Mejor manejo de encoding: Lectura/escritura en UTF-8 para soportar caracteres acentuados.
-- Mensajes y logging: Salidas por consola mejoradas y mensajes de error más claros.
-
----
-
 ## Formato del Archivo de Datos (actualizado)
 
 El archivo `empleados.txt` debe tener este formato principal (separado por punto y coma o coma). Campos opcionales al final: id, fechaNacimiento.
@@ -123,11 +112,6 @@ Ejemplo con opcionales:
 12.345.678-9;Juan;Pérez;juan.perez@salmontt.cl;+56912345678;Avenida Angelmó;1250;Puerto Montt;Chile;Ingeniero;Producción;1800000;2020-03-15;12345;1990-07-21
 ```
 
-Notas:
-- Fechas aceptadas: dd/MM/yyyy y yyyy-MM-dd.
-- Separadores aceptados: `;` o `,` (el parser intenta detectar el separador automáticamente).
-- Líneas con formato inválido quedan registradas y se omiten para continuar la carga.
-
 ---
 
 ## Instrucciones de Ejecución (actualizadas)
@@ -144,26 +128,6 @@ Ejecutar:
 ```bash
 java -cp bin ui.Main
 ```
-
-Exportar CSV (ejemplo desde la ejecución del programa):
-- Al ejecutar el programa se mostrará una opción o comando para exportar: "exportarCSV empleados_export.csv"
-- El archivo resultante estará en UTF-8 y separado por `;`.
-
----
-
-## Resumen de cambios por clase (qué buscar en el código)
-
-- model/Empleado.java
-  - fechaContratacion cambia a LocalDate (getters/setters ajustados).
-- service/GestorEmpleados.java
-  - nuevo método exportarCSV(String ruta).
-  - carga robusta desde archivo: detecta separador, acepta fechas en dos formatos, ignora líneas erróneas.
-- util/Validador.java
-  - validaciones de RUT y email más estrictas.
-  - validación de salario y teléfono actualizada.
-- ui/Main.java
-  - nueva opción para exportar CSV y mensajes informativos.
-
 ---
 
 ## Ejemplo de salida (breve)
