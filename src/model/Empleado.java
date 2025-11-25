@@ -34,6 +34,7 @@ public class Empleado extends Persona {
     public Empleado(String rut, String nombre, String apellido, String email, String telefono, 
                     Direccion direccion, String cargo, String departamento, double salario, 
                     String fechaContratacion) {
+        super(rut, nombre, apellido, email, telefono, direccion); // Llamada al constructor de la clase padre
         this.cargo = cargo;
         this.departamento = departamento;
         this.salario = salario;
