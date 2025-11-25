@@ -2,6 +2,7 @@ package service;
 
 import model.Empleado;
 import model.Direccion;
+import util.Validador;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.BufferedReader;
@@ -24,12 +25,34 @@ public class GestorEmpleados {
     }
 
     /**
-     * Agrega un empleado a la colección
+     * Agrega un empleado a la colección con validación
      */
     public void agregarEmpleado(Empleado empleado) {
         if (empleado != null) {
-            listaEmpleados.add(empleado);
-            System.out.println("Empleado agregado: " + empleado.getNombre() + " " + empleado.getApellido());
+            // Validar datos del empleado usando la clase Validador
+            boolean esValido = true;
+
+            if (!Validador.esRutValido(empleado.getRut())) {
+                System.out.println("Advertencia: RUT con formato inválido");
+                esValido = false;
+            }
+
+            if (!Validador.esEmailValido(empleado.getEmail())) {
+                System.out.println("Advertencia: Email con formato inválido");
+                esValido = false;
+            }
+
+            if (!Validador.esSalarioValido(empleado.getSalario())) {
+                System.out.println("Advertencia: Salario fuera del rango válido");
+                esValido = false;
+            }
+
+            if (esValido) {
+                listaEmpleados.add(empleado);
+                System.out.println("Empleado agregado: " + empleado.getNombre() + " " + empleado.getApellido());
+            } else {
+                System.out.println("Empleado NO agregado debido a datos inválidos");
+            }
         }
     }
 
@@ -113,18 +136,53 @@ public class GestorEmpleados {
                         throw new Exception("Formato incorrecto");
                     }
 
-                    // Crear objetos
+                    // Extraer datos
+                    String rut = datos[0].trim();
+                    String nombre = datos[1].trim();
+                    String apellido = datos[2].trim();
+                    String email = datos[3].trim();
+                    String telefono = datos[4].trim();
+                    String salarioStr = datos[11].trim();
+
+                    // VALIDACIONES USANDO LA CLASE VALIDADOR
+                    // Validar RUT con expresión regular
+                    if (!Validador.esRutValido(rut)) {
+                        throw new Exception("RUT inválido: " + rut);
+                    }
+
+                    // Validar email
+                    if (!Validador.esEmailValido(email)) {
+                        throw new Exception("Email inválido: " + email);
+                    }
+
+                    // Validar teléfono
+                    if (!Validador.esTelefonoValido(telefono)) {
+                        throw new Exception("Teléfono inválido: " + telefono);
+                    }
+
+                    // Parsear salario de forma segura
+                    double salario = Validador.parseDoubleSeguro(salarioStr);
+
+                    // Validar salario
+                    if (!Validador.esSalarioValido(salario)) {
+                        throw new Exception("Salario fuera de rango válido: $" + salario);
+                    }
+
+                    // Validar campos obligatorios
+                    if (!Validador.esTextoValido(nombre) || !Validador.esTextoValido(apellido)) {
+                        throw new Exception("Nombre o apellido vacío");
+                    }
+
+                    // Crear objetos después de validar
                     Direccion direccion = new Direccion(
                         datos[5].trim(), datos[6].trim(),
                         datos[7].trim(), datos[8].trim()
                     );
 
                     Empleado empleado = new Empleado(
-                        datos[0].trim(), datos[1].trim(), datos[2].trim(),
-                        datos[3].trim(), datos[4].trim(), direccion,
+                        rut, nombre, apellido, email, telefono, direccion,
                         datos[9].trim(), datos[10].trim(),
-                        Double.parseDouble(datos[11].trim()),
-                        datos[12].trim()
+                        salario, datos[12].trim()
                     );
 
                     listaEmpleados.add(empleado);
