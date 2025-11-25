@@ -120,7 +120,7 @@ Recomendado: Java 11+.
 
 Compilar:
 ```bash
-cd C:\Users\marar\Desktop\Duoc\POO-exp1-Salmontt
+cd C:\...\SalmonttApp
 javac -d bin -sourcepath src -encoding UTF-8 src\ui\Main.java
 ```
 
