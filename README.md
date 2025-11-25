@@ -1,91 +1,228 @@
-# Sistema de Gestión de Personas - Salmontt
+# Sistema de Gestión de Empleados - SalmonttApp
 
 ## Descripción del Proyecto
 
-Este proyecto implementa un sistema básico de gestión de personas para la empresa Salmontt, desarrollado en Java aplicando los principios de Programación Orientada a Objetos (POO). El sistema permite representar personas y empleados con sus datos personales y direcciones, aplicando conceptos fundamentales como encapsulamiento, herencia y composición.
+Sistema de gestión de empleados desarrollado en Java para la empresa salmonera Salmontt. Este proyecto permite cargar, almacenar, buscar y mostrar información de empleados utilizando colecciones dinámicas y lectura de archivos externos.
 
-## Contexto
+El sistema aplica principios de Programación Orientada a Objetos (POO) y demuestra el uso de estructuras de datos provistas por Java.
 
-Salmontt es una empresa dedicada a la acuicultura y comercialización de salmón. Actualmente, no cuenta con un sistema estructurado para organizar la información de las personas vinculadas a la empresa. Este proyecto constituye la primera fase de digitalización de sus sistemas internos, proporcionando una base técnica sólida para futuras funcionalidades.
+---
 
 ## Estructura del Proyecto
 
 ```
-POO-exp1/
+POO-exp1-Salmontt/
 ├── src/
-│   ├── model/              # Paquete con las clases del dominio
-│   │   ├── Direccion.java  # Clase que representa una dirección
-│   │   ├── Persona.java    # Clase base que representa una persona
-│   │   └── Empleado.java   # Clase que hereda de Persona (empleado)
-│   └── app/                # Paquete con la aplicación principal
-│       └── Main.java       # Clase principal para ejecutar el sistema
-└── README.md               # Este archivo
+│   ├── model/              # Clases de dominio
+│   │   ├── Persona.java    # Clase base con datos personales
+│   │   ├── Empleado.java   # Clase que extiende Persona
+│   │   └── Direccion.java  # Clase para direcciones
+│   │
+│   ├── service/            # Lógica de negocio
+│   │   └── GestorEmpleados.java  # Gestor de colecciones
+│   │
+│   ├── util/               # Utilidades
+│   │   └── Validador.java  # Validación de datos
+│   │
+│   └── ui/                 # Interfaz de usuario
+│       └── Main.java       # Clase principal
+│
+├── bin/                    # Archivos compilados
+├── empleados.txt           # Archivo de datos
+└── README.md              # Este archivo
 ```
+
+---
+
+## Paquetes Utilizados
+
+### 📌 Paquete `model`
+Contiene las clases que representan las entidades del sistema:
+- **Direccion**: Representa una dirección física (calle, número, ciudad, país)
+- **Persona**: Clase base con datos personales (RUT, nombre, apellido, email, teléfono, dirección)
+- **Empleado**: Extiende Persona, agrega cargo, departamento, salario y fecha de contratación
+
+### 📌 Paquete `service`
+Contiene la lógica de negocio:
+- **GestorEmpleados**: Administra la colección de empleados usando ArrayList
+  - Carga datos desde archivos .txt
+  - Agrega empleados
+  - Busca por departamento
+  - Filtra por salario
+  - Muestra listados
+
+### 📌 Paquete `util`
+Contiene utilidades para el sistema:
+- **Validador**: Métodos estáticos para validar RUT, email, teléfono, salarios, etc.
+
+### 📌 Paquete `ui`
+Contiene la interfaz de usuario:
+- **Main**: Clase principal que ejecuta el sistema y muestra resultados por consola
+
+---
 
 ## Clases Implementadas
 
-### 1. Direccion (model/Direccion.java)
-Clase que representa una dirección física.
+### Direccion
+- Atributos: calle, numero, ciudad, pais
+- Métodos: constructores, getters, setters, toString()
 
-**Atributos:**
-- `calle` (String): Nombre de la calle
-- `numero` (String): Número de la dirección
-- `ciudad` (String): Ciudad
-- `pais` (String): País
+### Persona
+- Atributos: rut, nombre, apellido, email, telefono, direccion
+- Aplica **composición** con Direccion
+- Métodos: constructores, getters, setters, toString()
 
-**Métodos:**
-- Constructor vacío y constructor con parámetros
-- Getters y setters para todos los atributos
-- `toString()`: Retorna la dirección en formato legible
+### Empleado (hereda de Persona)
+- Atributos adicionales: cargo, departamento, salario, fechaContratacion
+- Usa `super()` para llamar al constructor padre
+- Métodos: constructores, getters, setters, toString()
 
-### 2. Persona (model/Persona.java)
-Clase base que representa a una persona. Aplica **composición** con la clase Direccion.
+### GestorEmpleados
+- Usa `ArrayList<Empleado>` para almacenar empleados
+- Métodos principales:
+  - `cargarDesdeArchivo()`: Lee datos desde archivo .txt
+  - `agregarEmpleado()`: Agrega un empleado a la colección
+  - `buscarPorDepartamento()`: Busca empleados por departamento
+  - `filtrarPorSalario()`: Filtra empleados por salario mínimo
+  - `mostrarEmpleados()`: Muestra todos los empleados
+  - `getCantidadEmpleados()`: Retorna el total de empleados
 
-**Atributos:**
-- `rut` (String): RUT de la persona
-- `nombre` (String): Nombre
-- `apellido` (String): Apellido
-- `email` (String): Correo electrónico
-- `telefono` (String): Número de teléfono
-- `direccion` (Direccion): Objeto Direccion (composición)
+---
 
-**Métodos:**
-- Constructor vacío y constructores con parámetros
-- Getters y setters para todos los atributos
-- `toString()`: Retorna los datos de la persona en formato legible
+## Cambios implementados (resumen)
 
-### 3. Empleado (model/Empleado.java)
-Clase que **hereda** de Persona, representando a un empleado de la empresa.
+- Exportar a CSV: Se añadió la capacidad en GestorEmpleados para exportar la lista de empleados a un archivo CSV (método exportarCSV).
+- Validaciones mejoradas: Validador actualizado para validación más estricta de RUT y email, y mejor manejo de teléfono.
+- Fechas con java.time: El manejo de fechas (fechaContratacion) usa ahora java.time.LocalDate. Se aceptan formatos dd/MM/yyyy y yyyy-MM-dd al cargar desde archivo.
+- Lectura flexible: La carga desde `empleados.txt` ahora acepta separadores `;` o `,` y campos opcionales (ej: id, fechaNacimiento). Las líneas con campos inválidos se registran y se ignoran sin detener la carga.
+- Mejor manejo de encoding: Lectura/escritura en UTF-8 para soportar caracteres acentuados.
+- Mensajes y logging: Salidas por consola mejoradas y mensajes de error más claros.
 
-**Atributos adicionales:**
-- `cargo` (String): Cargo del empleado
-- `departamento` (String): Departamento donde trabaja
-- `salario` (double): Salario del empleado
-- `fechaContratacion` (String): Fecha de contratación
+---
 
-**Métodos:**
-- Constructores que invocan al constructor de la clase
-- Getters y setters para los atributos específicos
-- `toString()` sobrescrito: Retorna los datos completos del empleado
+## Formato del Archivo de Datos (actualizado)
 
-### 4. Main (app/Main.java)
-Clase principal que ejecuta el sistema y realiza pruebas.
+El archivo `empleados.txt` debe tener este formato principal (separado por punto y coma o coma). Campos opcionales al final: id, fechaNacimiento.
 
-**Funcionalidad:**
-- Crea instancias de Direccion, Persona y Empleado
-- Muestra la información de los objetos por consola usando `toString()`
-- Demuestra el uso de getters y setters modificando datos
+Formato obligado (13 campos):
+```
+rut;nombre;apellido;email;telefono;calle;numero;ciudad;pais;cargo;departamento;salario;fechaContratacion
+```
 
-## Principios de POO Aplicados
+Formato ejemplo (acepta fecha en dd/MM/yyyy o yyyy-MM-dd):
+```
+12.345.678-9;Juan;Pérez;juan.perez@salmontt.cl;+56912345678;Avenida Angelmó;1250;Puerto Montt;Chile;Ingeniero en Acuicultura;Producción;1800000;15/03/2020
+```
 
-1. **Encapsulamiento**: Todos los atributos son privados con acceso mediante getters y setters públicos
-2. **Herencia**: La clase Empleado extiende la clase Persona
-3. **Composición**: La clase Persona contiene un objeto Direccion
-4. **Polimorfismo**: Sobrescritura del método `toString()` en todas las clases
+Campos opcionales (si están presentes, se añaden al final de la línea):
+```
+...;id;fechaNacimiento
+```
+Ejemplo con opcionales:
+```
+12.345.678-9;Juan;Pérez;juan.perez@salmontt.cl;+56912345678;Avenida Angelmó;1250;Puerto Montt;Chile;Ingeniero;Producción;1800000;2020-03-15;12345;1990-07-21
+```
 
-## Autor
+Notas:
+- Fechas aceptadas: dd/MM/yyyy y yyyy-MM-dd.
+- Separadores aceptados: `;` o `,` (el parser intenta detectar el separador automáticamente).
+- Líneas con formato inválido quedan registradas y se omiten para continuar la carga.
 
-- **Nombre del Estudiante**: Mariana Arenas Vergara
-- **Asignatura**: PRY2202 - Programación Orientada a Objetos I
-- **Institución**: DuocUC
-- **Fecha**: Noviembre 2025
+---
+
+## Instrucciones de Ejecución (actualizadas)
+
+Recomendado: Java 11+.
+
+Compilar:
+```bash
+cd C:\Users\marar\Desktop\Duoc\POO-exp1-Salmontt
+javac -d bin -sourcepath src -encoding UTF-8 src\ui\Main.java
+```
+
+Ejecutar:
+```bash
+java -cp bin ui.Main
+```
+
+Exportar CSV (ejemplo desde la ejecución del programa):
+- Al ejecutar el programa se mostrará una opción o comando para exportar: "exportarCSV empleados_export.csv"
+- El archivo resultante estará en UTF-8 y separado por `;`.
+
+---
+
+## Resumen de cambios por clase (qué buscar en el código)
+
+- model/Empleado.java
+  - fechaContratacion cambia a LocalDate (getters/setters ajustados).
+- service/GestorEmpleados.java
+  - nuevo método exportarCSV(String ruta).
+  - carga robusta desde archivo: detecta separador, acepta fechas en dos formatos, ignora líneas erróneas.
+- util/Validador.java
+  - validaciones de RUT y email más estrictas.
+  - validación de salario y teléfono actualizada.
+- ui/Main.java
+  - nueva opción para exportar CSV y mensajes informativos.
+
+---
+
+## Ejemplo de salida (breve)
+```
+--- CARGANDO DATOS DESDE ARCHIVO ---
+Cargando datos desde: empleados.txt (UTF-8) — separador detectado: ;
+Empleados cargados exitosamente: 15 (2 filas ignoradas por formato)
+--- EXPORTANDO A CSV ---
+Exportado correctamente a: empleados_export.csv
+```
+
+---
+
+## Funcionalidades Implementadas
+
+### ✅ Colecciones Dinámicas
+- Uso de `ArrayList<Empleado>` para almacenar empleados
+- Operaciones de inserción, búsqueda y recorrido
+
+### ✅ Lectura de Archivos
+- Lectura de archivos .txt
+- Uso de `BufferedReader` y `FileReader`
+- Procesamiento línea por línea con `.split()`
+
+### ✅ Búsquedas y Filtros
+- Búsqueda por departamento
+- Filtrado por salario mínimo
+- Uso de bucles for-each
+
+### ✅ Validación de Datos
+- Uso de try-catch para capturar errores
+- Validación de formato de datos
+- Manejo de excepciones
+
+### ✅ Principios POO
+
+**Encapsulamiento:**
+- Atributos `private` en todas las clases
+- Acceso mediante getters y setters
+
+**Herencia:**
+- `Empleado` extiende `Persona`
+- Uso de `super()` para llamar al constructor padre
+
+**Composición:**
+- `Persona` tiene una `Direccion`
+- `GestorEmpleados` contiene una lista de `Empleado`
+
+**Polimorfismo:**
+- Sobrescritura del método `toString()` en todas las clases
+
+---
+
+## Autor: Mariana Arenas Vergara
+
+**Proyecto desarrollado para:**
+- Asignatura: Desarrollo Orientado a Objetos I
+- Institución: DUOC UC
+- Experiencia: 2 - Semana 5
+- Empresa: Salmontt S.A.
+
+---
