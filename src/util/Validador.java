@@ -70,7 +70,7 @@ public class Validador {
      */
     public static boolean esSalarioValido(double salario) {
         // Salario mínimo en Chile (aproximado) hasta un límite razonable
-        return salario >= 400000 && salario <= 50000000;
+        return salario >= 400000 && salario <= 10000000;
     }
 
     /**

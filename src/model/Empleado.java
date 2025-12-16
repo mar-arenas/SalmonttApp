@@ -3,9 +3,9 @@ package model;
 /**
  * Clase que representa a un empleado de la empresa Salmontt.
  * Extiende la clase Persona agregando atributos específicos del empleado.
- * Aplica el principio de herencia.
+ * Aplica el principio de herencia e implementa la interfaz Registrable.
  */
-public class Empleado extends Persona {
+public class Empleado extends Persona implements Registrable {
     // Atributos privados específicos del empleado
     private String cargo;
     private String departamento;
@@ -91,5 +91,18 @@ public class Empleado extends Persona {
                 ", Salario=$" + String.format("%,.0f", salario) +
                 ", Fecha de Contratación='" + fechaContratacion + '\'' +
                 '}';
+    }
+
+    /**
+     * Implementación del método de la interfaz Registrable
+     * @return Resumen conciso del empleado
+     */
+    @Override
+    public String mostrarResumen() {
+        return "RUT: " + getRut() +
+               " | Nombre: " + getNombre() + " " + getApellido() +
+               " | Cargo: " + cargo +
+               " | Departamento: " + departamento +
+               " | Salario: $" + String.format("%,.0f", salario);
     }
 }

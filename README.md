@@ -1,67 +1,95 @@
-# Sistema de Gestión de Empleados - SalmonttApp
+![Duoc UC](https://www.duoc.cl/wp-content/uploads/2022/09/logo-0.png)
+# Sistema de Gestión de Empleados y Proveedores - Salmontt
 
-## Descripción del Proyecto
-
-Sistema de gestión de empleados desarrollado en Java para la empresa salmonera Salmontt. Este proyecto permite cargar, almacenar, buscar y mostrar información de empleados utilizando colecciones dinámicas y lectura de archivos externos.
-
-El sistema aplica principios de Programación Orientada a Objetos (POO) y demuestra el uso de estructuras de datos provistas por Java.
+## Autor del proyecto
+- **Nombre completo:** Mariana Arenas Vergara
+- **Carrera:** Analista Programador
+- **Sede:** Online
+- **Asignatura:** Desarrollo Orientado a Objetos I
+- **Evaluación:** Experiencia 3 - Semana 8
 
 ---
 
-## Estructura del Proyecto
+## Descripción general del sistema
+
+Este proyecto corresponde a la Experiencia 3 de la asignatura *Desarrollo Orientado a Objetos I*. Se trata de un sistema de gestión desarrollado en Java para la empresa salmonera Salmontt, cuyo objetivo es modelar y gestionar empleados y proveedores aplicando los principios de encapsulamiento, composición, herencia, polimorfismo e interfaces.
+
+El sistema permite cargar, almacenar, buscar y mostrar información de empleados utilizando colecciones dinámicas y lectura de archivos externos. Además, incorpora una interfaz gráfica simple para facilitar la interacción del usuario con el sistema, permitiendo el registro de distintos tipos de entidades de forma polimórfica.
+
+El proyecto fue desarrollado a partir de un caso contextualizado, abordando problemáticas reales de gestión de recursos humanos y proveedores, proponiendo una solución estructurada, modular y reutilizable.
+
+---
+
+## Estructura general del proyecto
 
 ```
 SalmonttApp/
 ├── src/
-│   ├── model/              # Clases de dominio
-│   │   ├── Persona.java    # Clase base con datos personales
-│   │   ├── Empleado.java   # Clase que extiende Persona
-│   │   └── Direccion.java  # Clase para direcciones
+│   ├── model/                      # Clases de dominio
+│   │   ├── Registrable.java        # Interfaz común para entidades registrables
+│   │   ├── Persona.java            # Clase base con datos personales
+│   │   ├── Empleado.java           # Empleado (extiende Persona, implementa Registrable)
+│   │   ├── Proveedor.java          # Proveedor (extiende Persona, implementa Registrable)
+│   │   └── Direccion.java          # Clase para direcciones físicas
 │   │
-│   ├── service/            # Lógica de negocio
-│   │   └── GestorEmpleados.java  # Gestor de colecciones
+│   ├── service/                    # Lógica de negocio
+│   │   ├── GestorEmpleados.java   # Gestor específico para empleados
+│   │   └── GestorEntidades.java   # Gestor polimórfico para entidades registrables
 │   │
-│   ├── util/               # Utilidades
-│   │   └── Validador.java  # Validación de datos
+│   ├── util/                       # Utilidades y validaciones
+│   │   └── Validador.java          # Métodos de validación de datos
 │   │
-│   └── ui/                 # Interfaz de usuario
-│       └── Main.java       # Clase principal
+│   └── ui/                         # Interfaz de usuario
+│       ├── Main.java               # Programa principal (consola)
+│       └── MainGUI.java            # Interfaz gráfica con JOptionPane
 │
-├── bin/                    # Archivos compilados
-├── empleados.txt           # Archivo de datos
-└── README.md              # Este archivo
+├── bin/                            # Archivos compilados (.class)
+├── empleados.txt                   # Archivo de datos de empleados
+└── README.md                       # Este archivo
 ```
 
 ---
 
 ## Paquetes Utilizados
 
-### 📌 Paquete `model`
+### Paquete `model`
 Contiene las clases que representan las entidades del sistema:
+- **Registrable**: Interfaz que define el contrato común para entidades registrables
 - **Direccion**: Representa una dirección física (calle, número, ciudad, país)
 - **Persona**: Clase base con datos personales (RUT, nombre, apellido, email, teléfono, dirección)
-- **Empleado**: Extiende Persona, agrega cargo, departamento, salario y fecha de contratación
+- **Empleado**: Extiende Persona, implementa Registrable, agrega cargo, departamento, salario y fecha de contratación
+- **Proveedor**: Extiende Persona, implementa Registrable, agrega empresa y rubro
 
-### 📌 Paquete `service`
+### Paquete `service`
 Contiene la lógica de negocio:
 - **GestorEmpleados**: Administra la colección de empleados usando ArrayList
   - Carga datos desde archivos .txt
-  - Agrega empleados
+  - Agrega empleados con validación
   - Busca por departamento
   - Filtra por salario
   - Muestra listados
+- **GestorEntidades**: Administra colecciones polimórficas de entidades registrables
+  - Agrega entidades de distintos tipos (Empleado, Proveedor)
+  - Obtiene resúmenes diferenciados por tipo usando instanceof
+  - Gestiona colecciones heterogéneas
 
-### 📌 Paquete `util`
+### Paquete `util`
 Contiene utilidades para el sistema:
-- **Validador**: Métodos estáticos para validar RUT, email, teléfono, salarios, etc.
+- **Validador**: Métodos estáticos para validar RUT, email, teléfono, salarios, textos, etc.
 
-### 📌 Paquete `ui`
+### Paquete `ui`
 Contiene la interfaz de usuario:
-- **Main**: Clase principal que ejecuta el sistema y muestra resultados por consola
+- **Main**: Clase principal que ejecuta el sistema por consola, carga datos desde archivo y demuestra búsquedas
+- **MainGUI**: Interfaz gráfica con JOptionPane para ingreso interactivo de empleados y proveedores
 
 ---
 
 ## Clases Implementadas
+
+### Registrable (Interfaz)
+- Define el contrato común para entidades registrables
+- Método: `String mostrarResumen()`
+- Implementada por: Empleado y Proveedor
 
 ### Direccion
 - Atributos: calle, numero, ciudad, pais
@@ -72,16 +100,21 @@ Contiene la interfaz de usuario:
 - Aplica **composición** con Direccion
 - Métodos: constructores, getters, setters, toString()
 
-### Empleado (hereda de Persona)
+### Empleado (hereda de Persona, implementa Registrable)
 - Atributos adicionales: cargo, departamento, salario, fechaContratacion
 - Usa `super()` para llamar al constructor padre
-- Métodos: constructores, getters, setters, toString()
+- Métodos: constructores, getters, setters, toString(), mostrarResumen()
+
+### Proveedor (hereda de Persona, implementa Registrable)
+- Atributos adicionales: empresa, rubro
+- Usa `super()` para llamar al constructor padre
+- Métodos: constructores, getters, setters, toString(), mostrarResumen()
 
 ### GestorEmpleados
 - Usa `ArrayList<Empleado>` para almacenar empleados
 - Métodos principales:
   - `cargarDesdeArchivo()`: Lee datos desde archivo .txt
-  - `agregarEmpleado()`: Agrega un empleado a la colección
+  - `agregarEmpleado()`: Agrega un empleado con validación
   - `buscarPorDepartamento()`: Busca empleados por departamento
   - `filtrarPorSalario()`: Filtra empleados por salario mínimo
   - `mostrarEmpleados()`: Muestra todos los empleados
@@ -91,17 +124,10 @@ Contiene la interfaz de usuario:
 
 ## Formato del Archivo de Datos (actualizado)
 
-El archivo `empleados.txt` debe tener este formato principal (separado por punto y coma o coma). Campos opcionales al final: id, fechaNacimiento.
-
-Formato obligado (13 campos):
-```
-rut;nombre;apellido;email;telefono;calle;numero;ciudad;pais;cargo;departamento;salario;fechaContratacion
-```
-
-Formato ejemplo (acepta fecha en dd/MM/yyyy o yyyy-MM-dd):
-```
-12.345.678-9;Juan;Pérez;juan.perez@salmontt.cl;+56912345678;Avenida Angelmó;1250;Puerto Montt;Chile;Ingeniero en Acuicultura;Producción;1800000;15/03/2020
-```
+### 1. Encapsulamiento
+- Todos los atributos de las clases son `private`
+- Acceso controlado mediante getters y setters públicos
+- Ejemplo: Clase `Persona` con atributos privados (rut, nombre, apellido)
 
 Campos opcionales (si están presentes, se añaden al final de la línea):
 ```
@@ -114,9 +140,15 @@ Ejemplo con opcionales:
 
 ---
 
-## Instrucciones de Ejecución (actualizadas)
+### 3. Polimorfismo
+- Sobrescritura del método `toString()` en todas las clases
+- Implementación del método `mostrarResumen()` de forma diferente en `Empleado` y `Proveedor`
+- Colecciones polimórficas: `ArrayList<Registrable>` que puede contener distintos tipos
 
-Recomendado: Java 11+.
+### 4. Interfaces
+- Interfaz `Registrable` que define un contrato común
+- Implementada por `Empleado` y `Proveedor`
+- Permite tratar objetos de distintas clases de forma uniforme
 
 Compilar:
 ```bash
@@ -143,26 +175,26 @@ Exportado correctamente a: empleados_export.csv
 
 ## Funcionalidades Implementadas
 
-### ✅ Colecciones Dinámicas
+### Colecciones Dinámicas
 - Uso de `ArrayList<Empleado>` para almacenar empleados
 - Operaciones de inserción, búsqueda y recorrido
 
-### ✅ Lectura de Archivos
+### Lectura de Archivos
 - Lectura de archivos .txt
 - Uso de `BufferedReader` y `FileReader`
 - Procesamiento línea por línea con `.split()`
 
-### ✅ Búsquedas y Filtros
+### Búsquedas y Filtros
 - Búsqueda por departamento
 - Filtrado por salario mínimo
 - Uso de bucles for-each
 
-### ✅ Validación de Datos
+### Validación de Datos
 - Uso de try-catch para capturar errores
 - Validación de formato de datos
 - Manejo de excepciones
 
-### ✅ Principios POO
+### Principios POO
 
 **Encapsulamiento:**
 - Atributos `private` en todas las clases
@@ -183,10 +215,10 @@ Exportado correctamente a: empleados_export.csv
 
 ### Autor: Mariana Arenas Vergara
 
-**Proyecto desarrollado para:**
-- Asignatura: Desarrollo Orientado a Objetos I
-- Institución: DUOC UC
-- Experiencia: 2 - Semana 5
-- Empresa: Salmontt S.A.
 
 ---
+
+© Duoc UC | Escuela de Informática y Telecomunicaciones | Experiencia 3 - Semana 8
+
+---
+
