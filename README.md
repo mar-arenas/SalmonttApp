@@ -22,8 +22,8 @@ El proyecto fue desarrollado a partir de un caso contextualizado, abordando prob
 
 ## Estructura general del proyecto
 
-```plaintext
-POO-exp1-Salmontt/
+```
+SalmonttApp/
 ├── src/
 │   ├── model/                      # Clases de dominio
 │   │   ├── Registrable.java        # Interfaz común para entidades registrables
@@ -120,27 +120,25 @@ Contiene la interfaz de usuario:
   - `mostrarEmpleados()`: Muestra todos los empleados
   - `getCantidadEmpleados()`: Retorna el total de empleados
 
-### GestorEntidades
-- Usa `ArrayList<Registrable>` para almacenar entidades de distintos tipos
-- Métodos principales:
-  - `agregar(Registrable r)`: Agrega una entidad registrable
-  - `obtenerResúmenes()`: Obtiene lista de resúmenes usando instanceof para diferenciar tipos
-  - `getCantidad()`: Retorna el total de entidades registradas
-
 ---
 
-## Conceptos de POO aplicados en el proyecto
+## Formato del Archivo de Datos (actualizado)
 
 ### 1. Encapsulamiento
 - Todos los atributos de las clases son `private`
 - Acceso controlado mediante getters y setters públicos
 - Ejemplo: Clase `Persona` con atributos privados (rut, nombre, apellido)
 
-### 2. Herencia
-- `Empleado` extiende `Persona`
-- `Proveedor` extiende `Persona`
-- Reutilización de código mediante `super()` para llamar al constructor padre
-- Especialización de clases base añadiendo atributos específicos
+Campos opcionales (si están presentes, se añaden al final de la línea):
+```
+...;id;fechaNacimiento
+```
+Ejemplo con opcionales:
+```
+12.345.678-9;Juan;Pérez;juan.perez@salmontt.cl;+56912345678;Avenida Angelmó;1250;Puerto Montt;Chile;Ingeniero;Producción;1800000;2020-03-15;12345;1990-07-21
+```
+
+---
 
 ### 3. Polimorfismo
 - Sobrescritura del método `toString()` en todas las clases
@@ -152,35 +150,16 @@ Contiene la interfaz de usuario:
 - Implementada por `Empleado` y `Proveedor`
 - Permite tratar objetos de distintas clases de forma uniforme
 
-### 5. Composición
-- `Persona` tiene un objeto `Direccion` (relación "tiene-un")
-- `GestorEmpleados` contiene una lista de `Empleado`
-- `GestorEntidades` contiene una lista de `Registrable`
+Compilar:
+```bash
+cd C:\...\SalmonttApp
+javac -d bin -sourcepath src -encoding UTF-8 src\ui\Main.java
+```
 
-### 6. Abstracción
-- Uso de interfaces para definir comportamientos comunes
-- Separación de responsabilidades en diferentes paquetes (model, service, util, ui)
-- Clase `Validador` con métodos estáticos para validaciones
-
-### 7. Uso de instanceof
-- Diferenciación de tipos en tiempo de ejecución
-- Aplicado en `GestorEntidades.obtenerResúmenes()` para identificar si es Empleado o Proveedor
-
----
-
-## Resumen de cambios por clase (qué buscar en el código)
-
-- model/Empleado.java
-  - fechaContratacion cambia a LocalDate (getters/setters ajustados).
-- service/GestorEmpleados.java
-  - nuevo método exportarCSV(String ruta).
-  - carga robusta desde archivo: detecta separador, acepta fechas en dos formatos, ignora líneas erróneas.
-- util/Validador.java
-  - validaciones de RUT y email más estrictas.
-  - validación de salario y teléfono actualizada.
-- ui/Main.java
-  - nueva opción para exportar CSV y mensajes informativos.
-
+Ejecutar:
+```bash
+java -cp bin ui.Main
+```
 ---
 
 ## Ejemplo de salida (breve)
@@ -234,20 +213,7 @@ Exportado correctamente a: empleados_export.csv
 
 ---
 
-### Funcionalidades disponibles
-
-**En Main (consola):**
-- Carga automática de empleados desde archivo empleados.txt
-- Demostración de búsquedas por departamento
-- Filtrado de empleados por salario
-- Visualización de todos los empleados
-
-**En MainGUI (interfaz gráfica):**
-- Agregar empleados con validación de datos
-- Agregar proveedores con validación de datos
-- Mostrar resúmenes de todas las entidades registradas
-- Validación con reintentos en caso de datos inválidos
-- Cancelar operaciones en cualquier momento
+### Autor: Mariana Arenas Vergara
 
 
 ---
